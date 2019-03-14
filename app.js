@@ -7,12 +7,29 @@ client.on('ready', () => {
 });
 
 client.on('guildMemberAdd', member => {
-  // Send the message to a designated channel on a server:
-  const channel = member.guild.channels.find(ch => ch.name === 'member-log');
-  // Do nothing if the channel wasn't found on this server
+  const channel = member.guild.channels.find(ch => ch.name === 'welcome');
   if (!channel) return;
-  // Send the message, mentioning the member
-  channel.send(`Welcome to the server, ${member}`);
+
+  const noobRole = member.guild.roles.find(role => role.name === "Pre member");
+
+  member.addRole(noobRole).then(member => {
+    channel.send(`${member}\nようこそ!\n#terms を読んで、同意できる場合は「同意します」とこのチャンネルで送信してください。\n\nWelcome! Please check thourgh rules in #terms, and type "I agree" to agree & get permissions to have fun in this server.`);
+  });
+});
+
+client.on('message', message => {
+  if((message.content.trim() === ("同意します" || "同意します。") || message.content.match(/I agree/i)) && message.channel.name === 'welcome'){
+    const memberRole = message.guild.roles.find(role => role.name === "Member"),
+          gamerRole = message.guild.roles.find(role => role.name === "Gamer"),
+          noobRole = message.guild.roles.find(role => role.name === "Pre member");
+
+    message.member.addRole(memberRole).then(member => {
+      member.removeRole(noobRole);
+      member.addRole(gamerRole);
+    });
+  }else if(message.channel.name === 'welcome'){
+    message.delete();
+  };
 });
 
 client.login(process.env.BOT_TOKEN);
