@@ -10,6 +10,9 @@ client.on('guildMemberAdd', member => {
   const channel = member.guild.channels.find(ch => ch.name === 'welcome');
   if (!channel) return;
 
+  const isBot = member.user.bot;
+  if(isBot) return;
+
   const noobRole = member.guild.roles.find(role => role.name === "Pre member");
 
   member.addRole(noobRole).then(member => {
