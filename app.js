@@ -7,8 +7,8 @@ client.on('ready', () => {
 });
 
 client.on('guildMemberAdd', member => {
-  const channel = member.guild.channels.find(ch => ch.name === 'welcome');
-  if (!channel) return;
+  const channel = member.guild
+  if (channel === undefined) return;
 
   const isBot = member.user.bot;
   if(isBot) return;
@@ -34,5 +34,7 @@ client.on('message', message => {
     message.delete();
   };
 });
+
+client.on('error', console.error);
 
 client.login(process.env.BOT_TOKEN);
