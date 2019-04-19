@@ -7,7 +7,7 @@ client.on('ready', () => {
 });
 
 client.on('guildMemberAdd', member => {
-  const channel = member.guild
+  const channel = member.guild.channels.find(channel => channel.name === "welcome");
   if (channel === undefined) return;
 
   const isBot = member.user.bot;
